@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Zizah! ❤️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Quicksand', sans-serif; background-color: #0f172a; margin: 0; overflow: hidden; color: white; user-select: none; }
+        .font-handwriting { font-family: 'Dancing Script', cursive; }
+        
+        .page-container { display: none; min-height: 100vh; width: 100%; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1.5rem; position: relative; z-index: 10; overflow-y: auto; }
+        .active { display: flex; animation: fadeIn 0.6s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .envelope-wrapper { perspective: 1000px; cursor: pointer; transform: scale(0.9); }
+        @media (min-width: 768px) { .envelope-wrapper { transform: scale(1.1); } }
+        .envelope { position: relative; width: 300px; height: 200px; background: #ff4d4d; border-radius: 0 0 10px 10px; box-shadow: 0 10px 30px rgba(255,0,0,0.2); }
+        .flap { position: absolute; top: 0; width: 0; height: 0; border-left: 150px solid transparent; border-right: 150px solid transparent; border-top: 110px solid #cc0000; transform-origin: top; z-index: 30; }
+        .card-inner { position: absolute; bottom: 5px; left: 10px; right: 10px; height: 185px; background: #fff5f5; border-radius: 5px; z-index: 20; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 20px; }
+        
+        .bg-stripes { background: repeating-linear-gradient(45deg, #cc0000, #cc0000 10px, #ff4d4d 10px, #ff4d4d 20px); }
+        .animate-float { animation: floating 4s ease-in-out infinite; }
+        @keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+
+        .cd-rotate { animation: spin 4s linear infinite; animation-play-state: paused; }
+        .playing .cd-rotate { animation-play-state: running; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .music-note { position: absolute; font-size: 24px; color: white; pointer-events: none; z-index: 100; }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #991b1b; border-radius: 10px; }
+
+        .gallery-card { background: #fff9f0; padding: 10px; border-radius: 10px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); transform: rotate(-1deg); max-width: 90%; width: 320px; }
+        .gallery-img { width: 100%; height: 300px; object-fit: cover; border-radius: 5px; border: 4px solid white; }
+
+        /* Style untuk game objek bunga */
+        .game-flower { position: absolute; font-size: 40px; cursor: pointer; z-index: 50; user-select: none; transition: transform 0.1s ease; }
+        .game-flower:active { transform: scale(0.8); }
+    </style>
+</head>
+<body>
+
+    <audio id="audioStart" src="heaven.mp3" loop></audio>
+    <audio id="audioMain" src="shape_of_you.mp3" loop></audio>
+
+    <div id="landing" class="page-container active bg-slate-900">
+        <div class="envelope-wrapper" onclick="openMessage()">
+            <div id="envelope" class="envelope flex items-center justify-center">
+                <div id="flap" class="flap"></div>
+                <div id="card" class="card-inner shadow-xl p-4"><p class="text-[10px] font-bold text-red-500 uppercase tracking-widest">Tap to see message</p></div>
+                <div id="seal" class="absolute z-40 bg-white rounded-full p-3 shadow-lg flex items-center justify-center" style="top: 50%; transform: translateY(-50%);"><span class="text-red-500 text-2xl">❤️</span></div>
+            </div>
+        </div>
+        <p class="text-white/50 mt-12 text-sm animate-pulse text-center px-4">Diklik ya amplopnya zizah...</p>
+    </div>
+
+    <div id="content" class="page-container bg-stripes">
+        <div id="birthday-card" class="bg-[#fff9f0] w-full max-w-sm md:max-w-md p-6 md:p-8 rounded-xl border-[6px] border-red-800 shadow-2xl relative z-40">
+            <img id="balon-1" src="img/balon1.jpg" class="absolute w-24 md:w-32 opacity-0 z-10 animate-float" style="left: -40px; top: -400px;">
+            <img id="balon-2" src="img/balon2.jpg" class="absolute w-24 md:w-32 opacity-0 z-10 animate-float" style="right: -40px; top: -450px;">
+            <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-red-800 rounded-full p-4 border-4 border-[#fff9f0] z-50">❤️</div>
+            <div class="text-center pt-8">
+                <p class="text-xs font-bold mb-2 uppercase text-red-800/60">20 . 06 . 2010</p>
+                <h1 id="headline" class="font-handwriting text-4xl md:text-5xl text-red-800 mb-6 leading-tight">Happy Birthday Zizah</h1>
+                <div id="photo-container" class="hidden flex justify-center mb-6"><div class="relative w-40 h-40 border-4 border-red-800 rounded-full overflow-hidden shadow-lg scale-0 transition-transform duration-700 bg-white"><img src="poto1.jpeg" class="w-full h-full object-cover"></div></div>
+                <div id="default-icons" class="flex justify-center gap-4 mb-6 text-4xl">🎂💐</div>
+                <p class="text-red-800/80 text-sm italic mb-8">"Can't believe you're sixteen now."</p>
+                <div class="flex flex-col gap-3 items-center border-t-2 border-red-800/20 pt-6">
+                    <button id="showBoyBtn" onclick="showBirthdayBoy()" class="bg-red-800 text-white text-[10px] px-6 py-2 rounded-full font-bold uppercase tracking-widest shadow-lg hover:scale-105 transition-transform">Who is the birthday Girl?</button>
+                    <button id="nextWishBtn" onclick="showPage('wish-screen')" class="hidden bg-red-600 text-white text-[10px] px-8 py-2 rounded-full font-bold uppercase tracking-widest animate-bounce">Next to Wish →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="wish-screen" class="page-container bg-stripes">
+        <div class="bg-[#fff9f0] w-full max-w-sm md:max-w-md p-6 md:p-8 rounded-xl border-[6px] border-red-800 shadow-2xl">
+            <h2 class="font-handwriting text-3xl text-red-800 mb-4 border-b-2 border-red-800/10 pb-2">A Special Wish</h2>
+            <div class="custom-scroll max-h-[50vh] overflow-y-auto pr-2 text-red-800/90 text-sm leading-relaxed text-justify space-y-4">
+                <p>Selamat ulang tahun untuk orang spesial dalam hidupku!!</p>
+                <p>Terima kasih telah menjadi bagian dari hidupku, terima kasih telah tumbuh dengan baik, terima kasih karena selalu menjadi sumber kebahagiaanku, terima kasih karena selalu membuatku tertawa, dan terima kasih untuk semuanya.</p>
+                <p>Aku berharap pada hari istimewa ini kamu dikelilingi oleh kebahagiaan, diisi dengan kegembiraan, dan diberkati dengan cinta. Aku akan selalu ada untukmu.</p>
+                <p>Kamu tidak akan pernah kehilangan cintaku karena kamu luar biasa dan sangat berharga di bumi ini.</p>
+                <p>Tolong tetap sehat dan selalu bahagia, karena aku mencintaimu lebih dari kemarin dan akan selalu mencintaimu sampai besok. 🤍🤍</p>
+            </div>
+            <button onclick="showPage('music-screen')" class="mt-6 bg-red-600 text-white px-8 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-lg hover:scale-105 transition-transform">song remind about you →</button>
+        </div>
+    </div>
+
+    <div id="music-screen" class="page-container bg-stripes overflow-hidden">
+        <h2 class="text-white font-handwriting text-4xl mb-12 drop-shadow-lg">Songs Remind of You 🎵</h2>
+        <div class="relative w-56 h-56 md:w-64 md:h-64 mx-auto mb-10">
+            <div id="cd-player" class="absolute inset-0 bg-zinc-900 rounded-full border-8 border-zinc-800 shadow-2xl cd-rotate">
+                <div class="absolute inset-4 rounded-full overflow-hidden border-2 border-zinc-700"><img src="https://i.pinimg.com/736x/e6/5f/0c/e65f0c6ede57573306205af9dd7a115c.jpg" class="w-full h-full object-cover"></div>
+                <div class="absolute inset-[44%] bg-stripes rounded-full border-4 border-zinc-900 z-10"></div>
+            </div>
+        </div>
+        <div class="fixed right-5 top-1/2 -translate-y-1/2 flex flex-col gap-4 bg-black/30 p-4 rounded-full backdrop-blur-md z-50">
+            <button onclick="toggleMusic()" class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg text-red-600"><span id="playIcon">⏸️</span></button>
+        </div>
+        <p class="text-white/80 italic text-sm mb-6 px-4">"setiap nada ngingetin aku sama kamu..."</p>
+        <button onclick="showPage('gallery-1')" class="bg-red-600 text-white px-8 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-lg hover:scale-105 transition-transform">see our gallery→</button>
+    </div>
+
+    <div id="gallery-hook"></div>
+
+    <template id="gallery-template">
+        <div class="page-container bg-slate-900">
+            <div class="gallery-card">
+                <img class="gallery-img">
+                <p class="text-red-800 font-handwriting text-xl mt-4 gallery-caption"></p>
+            </div>
+            <div class="mt-8 flex gap-4">
+                <button class="nav-prev bg-white/10 px-6 py-2 rounded-full text-xs border border-white/20">Prev</button>
+                <button class="nav-next bg-red-600 px-8 py-2 rounded-full text-xs font-bold shadow-lg">Next</button>
+            </div>
+            <button onclick="location.reload()" class="mt-8 text-white/40 text-[10px] font-bold uppercase tracking-widest hover:text-white transition-colors">Restart to Landing Page 🔄</button>
+        </div>
+    </template>
+
+    <div id="game-screen" class="page-container bg-stripes select-none relative">
+        <div class="z-50 text-center pointer-events-none">
+            <h1 class="font-handwriting text-5xl text-white mb-2 drop-shadow-md">Catch the Flowers! 🌸</h1>
+            <p class="text-white/80 text-sm mb-6">Collect 5 flowers for the final surprise...</p>
+            <p class="text-white font-bold text-3xl tracking-widest" id="game-score">Score: 0 / 5</p>
+        </div>
+    </div>
+
+    <div id="final-screen" class="page-container bg-stripes">
+        <div class="bg-[#fff9f0] w-full max-w-sm p-6 rounded-2xl border-[6px] border-red-800 shadow-2xl relative text-red-800 flex flex-col items-center">
+            
+            <div class="w-32 h-32 border-4 border-red-500 rounded-full overflow-hidden shadow-lg mb-4 bg-white">
+                <img src="poto1.jpeg" class="w-full h-full object-cover">
+            </div>
+
+            <h2 class="font-handwriting text-3xl mb-4 italic text-red-600 font-bold">u did it! ❤️</h2>
+            
+            <div class="text-center text-sm font-semibold space-y-4 px-2 leading-relaxed max-h-[40vh] overflow-y-auto custom-scroll border-t border-red-800/10 pt-4">
+                <p>"Selamat ulang tahun ya, Zizah."</p>
+                <p>"Semoga di umur yang baru ini selalu diberikan kesehatan, panjang umur, dan kebahagiaan setiap hari."</p>
+                <p>"Semoga apa yang sedang disemogakan, cita-cita, serta target ke depannya bisa segera tercapai dan dilancarkan segala urusannya."</p>
+                <p>"Terima kasih sudah selalu menjadi teman cerita yang seru dan menyenangkan selama ini."</p>
+                <p>"Tetap menjadi pribadi yang baik dan ceria. Semoga hari ini dan seterusnya selalu dipenuhi hal-hal baik! ✨"</p>
+            </div>
+
+            <button onclick="location.reload()" class="mt-6 bg-red-800 hover:bg-red-900 text-white px-8 py-2 rounded-full text-xs font-bold uppercase tracking-wider shadow-md transition-all flex items-center gap-2">
+                Restart 🔄
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const audioStart = document.getElementById('audioStart');
+        const audioMain = document.getElementById('audioMain');
+        let currentAudio = null;
+        let isMutedManual = false; 
+        let noteInterval;
+        
+        // Logika Game Variabel
+        let score = 0;
+        let gameInterval;
+
+        const galleryData = [
+            { img: "poto1.jpeg", cap: "I Love You So Much " },
+            { img: "poto2.jpeg", cap: "You're So Beautiful " },
+        ];
+
+        function setupGallery() {
+            const hook = document.getElementById('gallery-hook');
+            const temp = document.getElementById('gallery-template');
+            const total = galleryData.length;
+
+            galleryData.forEach((data, index) => {
+                const clone = temp.content.cloneNode(true);
+                const page = clone.querySelector('.page-container');
+                const img = clone.querySelector('.gallery-img');
+                
+                page.id = `gallery-${index + 1}`;
+                img.src = data.img; 
+                clone.querySelector('.gallery-caption').innerText = data.cap;
+                
+                clone.querySelector('.nav-prev').onclick = () => {
+                    if (index === 0) showPage(`gallery-${total}`);
+                    else showPage(`gallery-${index}`);
+                };
+
+                clone.querySelector('.nav-next').onclick = () => {
+                    // DI SINI KITA UBAH: dari galeri terakhir lanjut ke minigame, bukan balik ke awal
+                    if (index === total - 1) showPage('game-screen');
+                    else showPage(`gallery-${index + 2}`);
+                };
+                
+                hook.appendChild(clone);
+            });
+        }
+
+        function playTargetMusic(targetAudio) {
+            if (currentAudio && currentAudio !== targetAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+            currentAudio = targetAudio;
+            
+            if (!isMutedManual) {
+                currentAudio.play().catch(e => console.log("Play blocked by browser"));
+                document.getElementById('playIcon').innerText = "⏸️";
+            }
+        }
+
+        function showPage(id) {
+            document.querySelectorAll('.page-container').forEach(p => p.classList.remove('active'));
+            const target = document.getElementById(id);
+            if(target) target.classList.add('active');
+            
+            // Hentikan interval game jika keluar dari game-screen sebelum selesai
+            if (id !== 'game-screen') {
+                clearInterval(gameInterval);
+            }
+
+            if (id === 'content' || id === 'wish-screen') {
+                playTargetMusic(audioStart);
+            } 
+            else if (id === 'music-screen' || id.includes('gallery') || id === 'game-screen' || id === 'final-screen') {
+                playTargetMusic(audioMain);
+                if (id === 'music-screen') {
+                    startMusicNotes();
+                    updateCDStatus();
+                }
+                if (id === 'game-screen') {
+                    startGame();
+                }
+                if (id === 'final-screen') {
+                    // Efek selebrasi confetti tiada henti pas dapet kejutan
+                    let duration = 5 * 1000;
+                    let end = Date.now() + duration;
+                    (function frame() {
+                        confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 } });
+                        confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 } });
+                        if (Date.now() < end) { requestAnimationFrame(frame); }
+                    }());
+                }
+            } else {
+                if (currentAudio) currentAudio.pause();
+            }
+        }
+
+        function toggleMusic() {
+            if (!currentAudio) return;
+
+            if (currentAudio.paused) {
+                currentAudio.play();
+                isMutedManual = false;
+                document.getElementById('playIcon').innerText = "⏸️";
+            } else {
+                currentAudio.pause();
+                isMutedManual = true; 
+                document.getElementById('playIcon').innerText = "▶️";
+                clearInterval(noteInterval);
+            }
+            updateCDStatus();
+        }
+
+        function updateCDStatus() {
+            const cd = document.getElementById('music-screen');
+            if (currentAudio === audioMain && !currentAudio.paused) {
+                cd.classList.add('playing');
+            } else {
+                cd.classList.remove('playing');
+            }
+        }
+
+        function openMessage() {
+            gsap.timeline()
+                .to("#seal", { scale: 0, opacity: 0, duration: 0.4 })
+                .to("#flap", { rotateX: 180, duration: 0.5 })
+                .to("#card", { y: -150, zIndex: 50, duration: 0.6 })
+                .to("#landing", { display: "none", duration: 0.4 })
+                .call(() => showPage('content'));
+        }
+
+        function showBirthdayBoy() {
+            document.getElementById('headline').innerText = "Birthday Girl";
+            document.getElementById('default-icons').classList.add('hidden');
+            const pc = document.getElementById('photo-container');
+            pc.classList.remove('hidden');
+            setTimeout(() => pc.querySelector('div').classList.add('scale-100'), 50);
+            gsap.to("#balon-1", { opacity: 1, top: "25%", duration: 2, ease: "bounce.out" });
+            gsap.to("#balon-2", { opacity: 1, top: "30%", duration: 2.2, ease: "bounce.out", delay: 0.1 });
+            document.getElementById('showBoyBtn').classList.add('hidden');
+            document.getElementById('nextWishBtn').classList.remove('hidden');
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        }
+
+        function startMusicNotes() {
+            if (noteInterval) clearInterval(noteInterval);
+            noteInterval = setInterval(() => {
+                if(currentAudio && !currentAudio.paused) {
+                    const note = document.createElement('div');
+                    note.className = 'music-note';
+                    note.innerText = '🎵';
+                    note.style.left = (Math.random() * 80 + 10) + 'vw';
+                    note.style.bottom = '10%';
+                    document.body.appendChild(note);
+                    gsap.to(note, {
+                        y: -window.innerHeight,
+                        x: (Math.random() - 0.5) * 150,
+                        rotation: Math.random() * 360,
+                        opacity: 0,
+                        duration: 3 + Math.random() * 2,
+                        onComplete: () => note.remove()
+                    });
+                }
+            }, 300);
+        }
+
+        // MECHANIC MINIGAME: CATCH THE FLOWER
+        function startGame() {
+            score = 0;
+            document.getElementById('game-score').innerText = `Score: ${score} / 5`;
+            
+            // Spawn bunga setiap 800ms
+            gameInterval = setInterval(() => {
+                createFlower();
+            }, 800);
+        }
+
+        function createFlower() {
+            if (score >= 5) return;
+
+            const flower = document.createElement('div');
+            flower.className = 'game-flower';
+            // Variasi kelopak bunga acak biar estetik
+            const flowersList = ['🌸', '💮', '🌹', '🌺', '🌻'];
+            flower.innerText = flowersList[Math.floor(Math.random() * flowersList.length)];
+            
+            // Set posisi horizontal acak
+            flower.style.left = (Math.random() * 85 + 5) + 'vw';
+            flower.style.top = '-60px';
+            document.getElementById('game-screen').appendChild(flower);
+
+            // Jatuhkan bunga menggunakan GSAP
+            let fallDuration = 3 + Math.random() * 2; // Durasi jatuh acak antara 3-5 detik
+            
+            let fallAnimation = gsap.to(flower, {
+                y: window.innerHeight + 100,
+                rotation: Math.random() * 360,
+                duration: fallDuration,
+                ease: "none",
+                onComplete: () => {
+                    flower.remove();
+                }
+            });
+
+            // Saat bunga di-click
+            flower.onclick = (e) => {
+                e.stopPropagation(); // Biar gak kegas double click
+                score++;
+                document.getElementById('game-score').innerText = `Score: ${score} / 5`;
+                
+                // Efek pop mini saat diklik menggunakan confetti kecil
+                confetti({ particleCount: 15, spread: 30, origin: { x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight } });
+
+                // Hapus bunga dari layar
+                fallAnimation.kill();
+                flower.remove();
+
+                // Cek kondisi menang
+                if (score >= 5) {
+                    clearInterval(gameInterval);
+                    // Beri delay sedikit biar dapet kepuasan nge-klik bunga terakhir
+                    setTimeout(() => {
+                        // Bersihkan semua sisa bunga di layar
+                        document.querySelectorAll('.game-flower').forEach(el => el.remove());
+                        showPage('final-screen');
+                    }, 400);
+                }
+            };
+        }
+
+        setupGallery();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</body>
+</html>
